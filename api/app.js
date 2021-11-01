@@ -22,6 +22,7 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Alive!' });
 });
 
+// Expects a request with body containing an array of messages [{to: E146 number, body: message body}]
 app.post('/sendBulk', async (req, res) => {
   const msgList = req.body;
 
@@ -50,21 +51,21 @@ app.post('/sendBulk', async (req, res) => {
 
   // Performant approach, sending blocks of messages in parallel
   const msgListCopy = msgList.slice(0);
-  // Divide the message list into blocks of 100 messages for API concurrency purposes
+  // Divide the message list into blocks of n messages for API concurrency purposes
   const blockArr = [];
   while (msgListCopy.length) {
-    const block = msgListCopy.splice(0, 10);
+    const block = msgListCopy.splice(0, blockSize);
     blockArr.push(block);
   }
   // Block counter
   let curBlock = 0;
-  // Loop through each 10 message block
+  // Loop through each n message block
   for (block of blockArr) {
-    // Send block of 100 SMS in parallel
+    // Send block of n SMS in parallel
     await Promise.all(
       block.map(async (msg) => {
         const { to, body } = msg;
-        // Make request to
+        // Make request to Twilio
         await twilioClient.messages.create({
           to,
           body: `${body}: ${getRandomInt(1, 1000)}`,
