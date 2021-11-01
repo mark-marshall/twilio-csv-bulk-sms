@@ -7,6 +7,14 @@ function App() {
   // const buttonRef = React.createRef();
   const buttonRef = useRef(null);
   const [contacts, setContacts] = useState([]);
+  const [campaignStatus, setCampaignStatus] = useState({
+    complete: false,
+    loading: false,
+    numProcessed: {
+      total: 0,
+      max: 0,
+    },
+  });
 
   const handleOpenDialog = (e) => {
     if (buttonRef.current) {
@@ -23,11 +31,27 @@ function App() {
   };
 
   const handleSendSMS = async () => {
+    setCampaignStatus({
+      ...campaignStatus,
+      loading: true,
+    });
+
     console.log(contacts);
     const res = await axios.post(
       'https://mmarshall.eu.ngrok.io/sendBulk',
       contacts
     );
+    const { curProcessed } = res.data;
+    console.log();
+
+    setCampaignStatus({
+      complete: true,
+      loading: false,
+      numProcessed: {
+        total: curProcessed.curTotal,
+        max: curProcessed.maxTotal,
+      },
+    });
     console.log(res);
   };
 
@@ -53,6 +77,19 @@ function App() {
         <button className="sms-submit-button" onClick={handleSendSMS}>
           Send SMS Campaign ✅
         </button>
+        <div className="sms-submit-status">
+          {campaignStatus.complete ? (
+            <p>
+              Bulk send complete,{' '}
+              <span>{campaignStatus.numProcessed.total}</span> out of{' '}
+              <span>{campaignStatus.numProcessed.max}</span> SMS processed
+            </p>
+          ) : campaignStatus.loading ? (
+            <p>Processing bulk send...</p>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   );

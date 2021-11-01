@@ -17,7 +17,7 @@ html {
 
 .form-container-inner {
   background-color: lightcoral;
-  height: 300px;
+  height: 350px;
   width: 800px;
   padding: 50px;
   margin-bottom: 100px;
@@ -87,6 +87,18 @@ html {
 
 .sms-submit-button:hover {
   background: lightskyblue;
+}
+
+.sms-submit-status {
+  color: black;
+  font-weight: bold;
+}
+
+.sms-submit-status span {
+  color: lightcoral;
+  background: black;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
 h1 {

@@ -52,6 +52,7 @@ app.post('/sendBulk', async (req, res) => {
   // Performant approach, sending blocks of messages in parallel
   const msgListCopy = msgList.slice(0);
   // Divide the message list into blocks of n messages for API concurrency purposes
+  const blockSize = 10;
   const blockArr = [];
   while (msgListCopy.length) {
     const block = msgListCopy.splice(0, blockSize);
@@ -59,6 +60,8 @@ app.post('/sendBulk', async (req, res) => {
   }
   // Block counter
   let curBlock = 0;
+  // Processed messages counter
+  let curProcessed = { curTotal: 0, maxTotal: msgList.length };
   // Loop through each n message block
   for (block of blockArr) {
     // Send block of n SMS in parallel
@@ -66,12 +69,15 @@ app.post('/sendBulk', async (req, res) => {
       block.map(async (msg) => {
         const { to, body } = msg;
         // Make request to Twilio
-        await twilioClient.messages.create({
+        const twilioRes = await twilioClient.messages.create({
           to,
           body: `${body}: ${getRandomInt(1, 1000)}`,
           messagingServiceSid: process.env.TWILIO_MESSAGE_SERVICE_SID,
           // statusCallback: url to receive webhooks for status of message delivery
         });
+        if (twilioRes.status === 'accepted') {
+          curProcessed.curTotal += 1;
+        }
         // Optional access headers which show the current number of concurrent API requests
         // const lastResponse = twilioClient.httpClient.lastResponse;
         // await timeout(300);
@@ -80,7 +86,7 @@ app.post('/sendBulk', async (req, res) => {
     console.log(`Block: ${curBlock} finished`);
     curBlock += 1;
   }
-  res.status(200).json({ msgList });
+  res.status(200).json({ curProcessed });
 });
 
 module.exports = app;
