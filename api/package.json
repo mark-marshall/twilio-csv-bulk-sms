@@ -1,0 +1,25 @@
+{
+  "name": "csv-bulk-send-api",
+  "description": "API to send bulk SMS using Twilio",
+  "private": false,
+  "dependencies": {
+    "base-64": "^1.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "ngrok": "^4.0.1",
+    "node-fetch": "^2.6.1",
+    "twilio": "^3.65.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "twilio",
+    "csv"
+  ],
+  "license": "MIT"
+}
