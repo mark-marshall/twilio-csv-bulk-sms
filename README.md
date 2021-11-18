@@ -50,5 +50,5 @@ yarn start
 
 ## CSV Format
 
-The client is setup to parse CSVs containing 2 columns, a "to" column with the recipients phone number, and a "body" column with the hardcoded body of the message you wish to send to them.
+The client is set up to parse CSVs containing 2 columns, a "to" column with the recipients phone number, and a "body" column with the hardcoded body of the message you wish to send to them.
 
