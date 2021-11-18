@@ -54,5 +54,5 @@ The client is set up to parse CSVs containing 2 columns, a "to" column with the 
 
 to | body
 --- | --- 
-<E1.64 format> | <String>
+E1.64 format | String
 
