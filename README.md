@@ -52,7 +52,7 @@ yarn start
 
 The client is set up to parse CSVs containing 2 columns, a "to" column with the recipients phone number, and a "body" column with the hardcoded body of the message you wish to send to them:
 
-To | Body
+to | body
 --- | --- 
-E1.64 format | String
+<E1.64 format> | <String>
 
